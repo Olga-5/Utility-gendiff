@@ -2,4 +2,4 @@ install:
 	npm install
 
 lint:
-	npm run eslint .
+	npm run eslint
