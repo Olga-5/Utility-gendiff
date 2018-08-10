@@ -3,7 +3,31 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {},
+  "scripts": {
+    "babel-node": "babel-node",
+    "eslint": "eslint",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "gendiff": "dist/bin/gendiff.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Olga-5/Utility-gendiff.git"
+  },
+  "author": "olgasharapo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Olga-5/Utility-gendiff/issues"
+  },
+  "dependencies": {
+    "commander": "^2.17.1"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
@@ -15,20 +39,6 @@
     "eslint-plugin-babel": "^5.1.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-jest": "^21.19.0"
-  },
-  "scripts": {
-    "babel-node": "babel-node",
-    "eslint": "eslint",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Olga-5/Utility-gendiff.git"
-  },
-  "author": "olgasharapo",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Olga-5/Utility-gendiff/issues"
   },
   "homepage": "https://github.com/Olga-5/Utility-gendiff#readme"
 }
