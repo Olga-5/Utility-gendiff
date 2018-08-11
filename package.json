@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
     "babel-node": "babel-node",
     "eslint": "eslint",
     "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
-    "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepublishOnly": "npm run build"
   },
   "bin": {
     "gendiff": "dist/bin/gendiff.js"
@@ -16,6 +17,9 @@
   "files": [
     "dist"
   ],
+  "jest": {
+    "testEnvironment": "node"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Olga-5/Utility-gendiff.git"
@@ -26,19 +30,22 @@
     "url": "https://github.com/Olga-5/Utility-gendiff/issues"
   },
   "dependencies": {
-    "commander": "^2.17.1"
+    "commander": "^2.17.1",
+    "lodash": "^4.17.10"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
+    "babel-jest": "^23.4.2",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-babel": "^5.1.0",
     "eslint-plugin-import": "^2.13.0",
-    "eslint-plugin-jest": "^21.19.0"
+    "eslint-plugin-jest": "^21.19.0",
+    "jest": "^23.5.0"
   },
   "homepage": "https://github.com/Olga-5/Utility-gendiff#readme"
 }
