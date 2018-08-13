@@ -2,7 +2,8 @@ import fs from 'fs';
 import genDiff from '../src';
 
 test('gendiff', () => {
-  const result = fs.readFileSync('./__tests__/__fixtures__/result.txt', 'utf8');
-  expect(genDiff('./__tests__/__fixtures__/before.json', './__tests__/__fixtures__/after.json'))
+  const pathToTestFile = './__tests__/__fixtures__/';
+  const result = fs.readFileSync(`${pathToTestFile}result.txt`, 'utf8');
+  expect(genDiff(`${pathToTestFile}before.json`, `${pathToTestFile}after.json`))
     .toBe(result);
 });
