@@ -2,6 +2,7 @@ import _ from 'lodash';
 import fs from 'fs';
 import yaml from 'js-yaml';
 import path from 'path';
+import ini from 'ini';
 
 const action = [
   {
@@ -35,6 +36,11 @@ const format = [
     name: 'yaml',
     check: pathToFile => path.extname(pathToFile) === '.yaml' || path.extname(pathToFile) === '.yml',
     parse: file => yaml.safeLoad(file),
+  },
+  {
+    name: 'ini',
+    check: pathToFile => path.extname(pathToFile) === '.ini',
+    parse: file => ini.parse(file),
   },
 ];
 
