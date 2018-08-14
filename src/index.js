@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import fs from 'fs';
+import yaml from 'js-yaml';
+import path from 'path';
 
 const action = [
   {
@@ -23,14 +25,29 @@ const action = [
     process: (key, value1, value2) => `  + ${key}: ${value2}\n  - ${key}: ${value1}`,
   },
 ];
+const format = [
+  {
+    name: 'json',
+    check: pathToFile => path.extname(pathToFile) === '.json',
+    parse: file => JSON.parse(file),
+  },
+  {
+    name: 'yaml',
+    check: pathToFile => path.extname(pathToFile) === '.yaml' || path.extname(pathToFile) === '.yml',
+    parse: file => yaml.safeLoad(file),
+  },
+];
 
 const getAction = (value1, value2) => action.find(({ check }) => check(value1, value2));
+const getFormat = pathToFile => format.find(({ check }) => check(pathToFile));
 
 export default (pathToFile1, pathToFile2) => {
   const file1 = fs.readFileSync(pathToFile1, 'utf8');
   const file2 = fs.readFileSync(pathToFile2, 'utf8');
-  const obj1 = JSON.parse(file1);
-  const obj2 = JSON.parse(file2);
+  const formatFile = getFormat(pathToFile1);
+  const { parse } = formatFile;
+  const obj1 = parse(file1);
+  const obj2 = parse(file2);
   const keysFile1 = _.keys(obj1);
   const keysFile2 = _.keys(obj2);
   const jointKeys = _.union(keysFile1, keysFile2);
