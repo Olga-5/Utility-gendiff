@@ -25,9 +25,10 @@ const action = [
 
 
 const stringify = (value, indents) => {
+  const tab = ' '.repeat(6);
   const keys = _.keys(value);
   const str = keys.map(key => `${key}: ${value[key]}`).join('\n');
-  return `{\n${indents}      ${str}\n${indents}  }`;
+  return `{\n${indents}${tab}${str}\n${indents}  }`;
 };
 
 const getAction = typeNode => action.find(({ type }) => type === typeNode);
@@ -39,9 +40,9 @@ const render = (ast, spacesCount) => ast.map((node) => {
     type, key, valueOld, valueNew, children,
   } = node;
   const { process } = getAction(type);
-  const conversedValueOld = conversionValue(valueOld, indents);
-  const conversedValueNew = conversionValue(valueNew, indents);
-  return process(key, conversedValueOld, conversedValueNew, indents, render, children, spacesCount);
+  const convertedValueOld = conversionValue(valueOld, indents);
+  const convertedValueNew = conversionValue(valueNew, indents);
+  return process(key, convertedValueOld, convertedValueNew, indents, render, children, spacesCount);
 }).join('\n');
 
 export default render;
