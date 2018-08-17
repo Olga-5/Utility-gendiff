@@ -3,49 +3,45 @@ import _ from 'lodash';
 const action = [
   {
     type: 'nested',
-    process: (key, value1, value2, indents, f, ch) => `  ${indents}${key}: {\n${f(ch, `${indents}    `)}\n${indents}  }`,
+    process: (key, valueOld, valueNew, indents, f, ch, spacesCount) => `  ${indents}${key}: {\n${f(ch, spacesCount + 4)}\n${indents}  }`,
   },
   {
     type: 'unchanged',
-    process: (key, value1, value2, indents) => `  ${indents}${key}: ${value1}`,
+    process: (key, valueOld, valueNew, indents) => `  ${indents}${key}: ${valueOld}`,
   },
   {
     type: 'deleted',
-    process: (key, value1, value2, indents) => `${indents}- ${key}: ${value1}`,
+    process: (key, valueOld, valueNew, indents) => `${indents}- ${key}: ${valueOld}`,
   },
   {
     type: 'added',
-    process: (key, value1, value2, indents) => `${indents}+ ${key}: ${value2}`,
+    process: (key, valueOld, valueNew, indents) => `${indents}+ ${key}: ${valueNew}`,
   },
   {
     type: 'changed',
-    process: (key, value1, value2, indents) => `${indents}+ ${key}: ${value2}\n${indents}- ${key}: ${value1}`,
+    process: (key, valueOld, valueNew, indents) => `${indents}+ ${key}: ${valueNew}\n${indents}- ${key}: ${valueOld}`,
   },
 ];
 
 
 const stringify = (value, indents) => {
-  if (_.isObject(value)) {
-    const keys = _.keys(value);
-    const str = keys.map(key => `  ${key}: ${value[key]}`).join('\n');
-    return `{\n${indents}    ${str}\n${indents}  }`;
-  }
-  return value;
+  const keys = _.keys(value);
+  const str = keys.map(key => `${key}: ${value[key]}`).join('\n');
+  return `{\n${indents}      ${str}\n${indents}  }`;
 };
 
 const getAction = typeNode => action.find(({ type }) => type === typeNode);
+const conversionValue = (value, indents) => (_.isObject(value) ? stringify(value, indents) : value);
 
-const render = (ast, indents) => ast.map((node) => {
+const render = (ast, spacesCount) => ast.map((node) => {
+  const indents = ' '.repeat(spacesCount);
   const {
-    type, key, value1, value2, children,
+    type, key, valueOld, valueNew, children,
   } = node;
   const { process } = getAction(type);
-  return process(key,
-    stringify(value1, indents),
-    stringify(value2, indents),
-    indents,
-    render,
-    children);
+  const conversedValueOld = conversionValue(valueOld, indents);
+  const conversedValueNew = conversionValue(valueNew, indents);
+  return process(key, conversedValueOld, conversedValueNew, indents, render, children, spacesCount);
 }).join('\n');
 
 export default render;
