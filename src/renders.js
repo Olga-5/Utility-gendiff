@@ -23,11 +23,15 @@ const action = [
   },
 ];
 
-
 const stringify = (value, indents) => {
   const tab = ' '.repeat(6);
   const keys = _.keys(value);
-  const str = keys.map(key => `${key}: ${value[key]}`).join('\n');
+  const str = keys.map((key) => {
+    if (!_.isObject(value[key])) {
+      return `${key}: ${value[key]}`;
+    }
+    return `${key}: ${stringify(value[key], `${indents}${' '.repeat(2)}`)}`;
+  }).join('\n');
   return `{\n${indents}${tab}${str}\n${indents}  }`;
 };
 
