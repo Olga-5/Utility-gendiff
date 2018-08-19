@@ -23,20 +23,23 @@ const action = [
   },
 ];
 
-const stringify = (value, indents) => {
+const stringify = (value, spacesCount) => {
+  const indents = ' '.repeat(spacesCount);
   const tab = ' '.repeat(6);
   const keys = _.keys(value);
   const str = keys.map((key) => {
     if (!_.isObject(value[key])) {
       return `${key}: ${value[key]}`;
     }
-    return `${key}: ${stringify(value[key], `${indents}${' '.repeat(2)}`)}`;
+    const nextSpacesCount = spacesCount + 4;
+    return `${key}: ${stringify(value[key], nextSpacesCount)}`;
   }).join('\n');
   return `{\n${indents}${tab}${str}\n${indents}  }`;
 };
 
 const getAction = typeNode => action.find(({ type }) => type === typeNode);
-const conversionValue = (value, indents) => (_.isObject(value) ? stringify(value, indents) : value);
+const conversionValue = (value, spacesCount) => (_.isObject(value)
+  ? stringify(value, spacesCount) : value);
 
 const render = (ast, spacesCount) => ast.map((node) => {
   const indents = ' '.repeat(spacesCount);
@@ -44,8 +47,8 @@ const render = (ast, spacesCount) => ast.map((node) => {
     type, key, valueOld, valueNew, children,
   } = node;
   const { process } = getAction(type);
-  const convertedValueOld = conversionValue(valueOld, indents);
-  const convertedValueNew = conversionValue(valueNew, indents);
+  const convertedValueOld = conversionValue(valueOld, spacesCount);
+  const convertedValueNew = conversionValue(valueNew, spacesCount);
   return process(key, convertedValueOld, convertedValueNew, indents, render, children, spacesCount);
 }).join('\n');
 
