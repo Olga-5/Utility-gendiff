@@ -4,10 +4,13 @@ import genDiff from '../src';
 const pathToTestFlatFile = './__tests__/__fixtures__/flatFiles/';
 const pathToResultFlatFile = `${pathToTestFlatFile}result.txt`;
 const pathToResultPlainFlatFiles = `${pathToTestFlatFile}resultForFormatPlain.txt`;
+const pathToResultJsonFlatFiles = `${pathToTestFlatFile}resultForFormatJson.txt`;
 
 const pathToTestTreeFile = './__tests__/__fixtures__/treeFiles/';
 const pathToResultTreeFiles = `${pathToTestTreeFile}result.txt`;
 const pathToResultPlainTreeFiles = `${pathToTestTreeFile}resultForFormatPlain.txt`;
+const pathToResultJsonTreeFiles = `${pathToTestTreeFile}resultForFormatJson.txt`;
+
 
 const pathToFlatFileJson1 = `${pathToTestFlatFile}before.json`;
 const pathToFlatFileJson2 = `${pathToTestFlatFile}after.json`;
@@ -26,6 +29,7 @@ const pathToTreeFileIni2 = `${pathToTestTreeFile}after.ini`;
 
 const formatTree = 'tree';
 const formatPlain = 'plain';
+const formatJson = 'json';
 
 test('format tree', () => {
   const resultForFlatFiles = fs.readFileSync(pathToResultFlatFile, 'utf8');
@@ -69,4 +73,26 @@ test('format plain', () => {
 
   expect(genDiff(pathToTreeFileIni1, pathToTreeFileIni2, formatPlain))
     .toBe(resultPlainForTreeFiles);
+});
+
+test('format json', () => {
+  const resultJsonForFlatFiles = fs.readFileSync(pathToResultJsonFlatFiles, 'utf8');
+  expect(genDiff(pathToFlatFileJson1, pathToFlatFileJson2, formatJson))
+    .toBe(resultJsonForFlatFiles);
+
+  expect(genDiff(pathToFlatFileYml1, pathToFlatFileYml2, formatJson))
+    .toBe(resultJsonForFlatFiles);
+
+  expect(genDiff(pathToFlatFileIni1, pathToFlatFileIni2, formatJson))
+    .toBe(resultJsonForFlatFiles);
+
+  const resultJsonForTreeFiles = fs.readFileSync(pathToResultJsonTreeFiles, 'utf8');
+  expect(genDiff(pathToTreeFileJson1, pathToTreeFileJson2, formatJson))
+    .toBe(resultJsonForTreeFiles);
+
+  expect(genDiff(pathToTreeFileYml1, pathToTreeFileYml2, formatJson))
+    .toBe(resultJsonForTreeFiles);
+
+  expect(genDiff(pathToTreeFileIni1, pathToTreeFileIni2, formatJson))
+    .toBe(resultJsonForTreeFiles);
 });

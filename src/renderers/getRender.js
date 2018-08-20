@@ -1,5 +1,6 @@
 import renderTree from './renderTree';
 import renderPlain from './renderPlain';
+import renderJson from './renderJson';
 
 const renderers = [
   {
@@ -15,6 +16,10 @@ const renderers = [
       const arrKeys = [];
       return renderPlain(ast, arrKeys);
     },
+  },
+  {
+    name: 'json',
+    render: ast => renderJson(ast),
   },
 ];
 

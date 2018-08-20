@@ -5,7 +5,7 @@ lint:
 	npm run eslint
 
 start:
-	npm run babel-node -- src/bin/gendiff.js  ./__tests__/__fixtures__/flatFiles/before.json  ./__tests__/__fixtures__/flatFiles/after.json 
+	npm run babel-node -- src/bin/gendiff.js -f json ./__tests__/__fixtures__/treeFiles/before.json  ./__tests__/__fixtures__/treeFiles/after.json 
 
 publish:
 	npm publish
