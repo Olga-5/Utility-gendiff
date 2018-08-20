@@ -3,7 +3,7 @@ import _ from 'lodash';
 const action = [
   {
     type: 'nested',
-    process: (key, valueOld, valueNew, children, f) => f(children, `${key}.`),
+    process: (key, valueOld, valueNew, children, f) => f(children, [key]),
   },
   {
     type: 'unchanged',
@@ -24,7 +24,7 @@ const action = [
 ];
 
 const getAction = typeNode => action.find(({ type }) => type === typeNode);
-const transformationValue = (value) => {
+const conversionValue = (value) => {
   if (_.isBoolean(value)) {
     return value;
   } if (_.isObject(value)) {
@@ -37,11 +37,11 @@ const render = (ast, keyNode) => ast.map((node) => {
   const {
     type, key, valueOld, valueNew, children,
   } = node;
-  const ierarchy = `${keyNode}${key}`;
+  const path = [...keyNode, key].join('.');
   const { process } = getAction(type);
-  const transformationValueOld = transformationValue(valueOld);
-  const transformationValueNew = transformationValue(valueNew);
-  return process(ierarchy, transformationValueOld, transformationValueNew, children, render);
+  const convertedValueOld = conversionValue(valueOld);
+  const convertedValueNew = conversionValue(valueNew);
+  return process(path, convertedValueOld, convertedValueNew, children, render);
 }).join('');
 
 export default render;

@@ -8,7 +8,7 @@ commander
   .arguments('<firstConfig> <secondConfig>')
   .option('-f, --format [type]', 'Output format', 'tree')
   .action((firstConfig, secondConfig, cmd) => {
-    const diff = genDiff(cmd.format, firstConfig, secondConfig);
+    const diff = genDiff(firstConfig, secondConfig, cmd.format);
     console.log(diff);
   })
   .parse(process.argv);

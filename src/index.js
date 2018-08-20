@@ -1,9 +1,7 @@
 import fs from 'fs';
 import _ from 'lodash';
 import parseFile from './parsers';
-import renderDefault from './renderDefault';
-import renderPlain from './renderPlain';
-
+import getRender from './renderers/getRender';
 
 const action = [
   {
@@ -46,32 +44,13 @@ export const buildAst = (obj1, obj2) => {
   });
 };
 
-const renderers = [
-  {
-    name: 'tree',
-    process: (ast) => {
-      const spacesCount = 2;
-      return `{\n${renderDefault(ast, spacesCount)}\n}`;
-    },
-  },
-  {
-    name: 'plain',
-    process: (ast) => {
-      const key = '';
-      return renderPlain(ast, key);
-    },
-  },
-];
-
-const getRender = format => renderers.find(({ name }) => format === name);
-
-export default (format, pathToFile1, pathToFile2) => {
+export default (pathToFile1, pathToFile2, format) => {
   const file1 = fs.readFileSync(pathToFile1, 'utf8');
   const file2 = fs.readFileSync(pathToFile2, 'utf8');
   const obj1 = parseFile(file1, pathToFile1);
   const obj2 = parseFile(file2, pathToFile2);
   const ast = buildAst(obj1, obj2);
-  const { process } = getRender(format);
-  const diff = process(ast);
+  const { render } = getRender(format);
+  const diff = render(ast);
   return diff;
 };
